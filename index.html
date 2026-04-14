@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>1日スポーツ保険 料金計算</title>
+
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+
+    .container {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      max-width: 480px;
+      margin: auto;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-size: 1.1em;
+      font-weight: bold;
+    }
+
+    select, input {
+      width: 100%;
+      padding: 12px;
+      margin-top: 8px;
+      margin-bottom: 20px;
+      font-size: 1.1em;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      font-size: 1.2em;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #005fcc;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 1.4em;
+      text-align: center;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h2>1日スポーツ保険 料金計算</h2>
+
+    <label>性別</label>
+    <select id="gender">
+      <option value="male">男性</option>
+      <option value="female">女性</option>
+    </select>
+
+    <label>生年月日</label>
+    <input type="date" id="birth">
+
+    <button onclick="calc()">保険料を計算する</button>
+
+    <div id="result"></div>
+  </div>
+
+  <script>
+    function getAge(birthDateString) {
+      const today = new Date();
+      const birth = new Date(birthDateString);
+
+      let age = today.getFullYear() - birth.getFullYear();
+      const m = today.getMonth() - birth.getMonth();
+
+      if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
+        age--;
+      }
+      return age;
+    }
+
+    function getInsuranceFee(gender, age) {
+      if (gender === "male") {
+        if (age >= 6 && age <= 9) return 120;
+        if (age >= 10 && age <= 14) return 140;
+        if (age >= 15 && age <= 19) return 130;
+        if (age >= 20 && age <= 39) return 110;
+        if (age >= 40 && age <= 55) return 120;
+        if (age >= 56) return 130;
+      }
+
+      if (gender === "female") {
+        if (age >= 6 && age <= 14) return 110;
+        if (age >= 15 && age <= 19) return 100;
+        if (age >= 20 && age <= 24) return 90;
+        if (age >= 25 && age <= 44) return 100;
+        if (age >= 45 && age <= 54) return 110;
+        if (age >= 55 && age <= 64) return 120;
+        if (age >= 65) return 130;
+      }
+
+      return null;
+    }
+
+    function calc() {
+      const gender = document.getElementById("gender").value;
+      const birth = document.getElementById("birth").value;
+
+      if (!birth) {
+        alert("生年月日を入力してください");
+        return;
+      }
+
+      const age = getAge(birth);
+      const fee = getInsuranceFee(gender, age);
+
+      document.getElementById("result").innerText =
+        fee ? `保険料：${fee}円（${age}歳）` : "該当する料金がありません";
+    }
+  </script>
+</body>
+</html>
